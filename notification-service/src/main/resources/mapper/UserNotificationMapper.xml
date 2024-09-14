@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wen.notification.mapper.UserNotificationMapper">
+
+    <!-- 插入通知 -->
+    <insert id="insert" parameterType="com.wen.common.domain.notification.UserNotification" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_notifications (target_user_id, type, target_id, target_type, content, is_read, created_at, updated_at)
+        VALUES (#{targetUserId}, #{type}, #{targetId}, #{targetType}, #{content}, #{isRead}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <!-- 根据 ID 删除通知 -->
+    <delete id="delete" parameterType="com.wen.common.domain.notification.UserNotification">
+        DELETE FROM user_notifications WHERE target_user_id = #{targetUserId} AND target_id = #{targetId} AND target_type = #{targetType} AND type = #{type}
+    </delete>
+
+
+
+</mapper>

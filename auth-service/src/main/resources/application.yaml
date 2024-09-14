@@ -1,0 +1,44 @@
+server:
+  port: 9000
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: INFO
+
+spring:
+  application:
+    name: auth-service #服务名称
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8850 # nacos地址
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/paplanet_auth?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 1234
+  data:
+    redis:
+      host: 8.134.202.211
+      port: 6379
+      password: _Eq06
+      lettuce:
+        pool:
+          max-active: 20  # 最大连接数，负值表示没有限制，默认8
+          max-wait: -1    # 最大阻塞等待时间，负值表示没限制，默认-1
+          max-idle: 8     # 最大空闲连接，默认8
+          min-idle: 0     # 最小空闲连接，默认0
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true  # 开启驼峰命名
+
+zcy:
+  jwt:
+    secret: luv929 # 加密秘钥
+    expire: 604800 # token有效时长，7天，单位秒
+    header: Authorization # token在请求头中的名称
+
