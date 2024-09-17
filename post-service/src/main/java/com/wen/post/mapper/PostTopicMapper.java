@@ -8,4 +8,5 @@ import java.util.List;
 @Mapper
 public interface PostTopicMapper {
     int insert(List<PostTopic> postTopics);
+    List<Long> selectTopicIdsByPostId(Long postId);
 }

@@ -10,10 +10,14 @@ import com.wen.common.domain.post.dto.LikeDTO;
 import com.wen.common.domain.post.dto.LikerDTO;
 import com.wen.common.domain.post.dto.PostDTO;
 import com.wen.common.domain.post.dto.ReviewPostDTO;
+import com.wen.common.domain.post.vo.AuthorVO;
+import com.wen.common.domain.post.vo.MediaVO;
+import com.wen.common.domain.post.vo.PostVO;
 import com.wen.common.lang.ResponseVO;
 import com.wen.post.client.UserClient;
 import com.wen.post.mapper.*;
 import com.wen.post.service.PostService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +42,10 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private NotificationService notificationService;
     @Autowired
+    private TopicMapper topicMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
+    @Resource
     private UserClient userClient;
 
     // 添加帖子
@@ -168,7 +176,7 @@ public class PostServiceImpl implements PostService {
                 throw new RuntimeException("取消点赞失败");
             }
 
-            String ACTION = NotificationAction.ADD.name();
+            String ACTION = NotificationAction.DELETE.name();
             // 封装取消点赞通知
             UserNotification cancelLikeNotification = createNotification(postId,likeDTO.getLiker(),targetUserId, TYPE, ACTION);//设置通知对象以及通知类型为点赞通知
             LikePostNotificationDTO likePostNotificationDTO = new LikePostNotificationDTO();
@@ -189,7 +197,7 @@ public class PostServiceImpl implements PostService {
             }
 
             // 封装点赞通知
-            String ACTION = NotificationAction.DELETE.name();
+            String ACTION = NotificationAction.ADD.name();
             UserNotification likeNotification = createNotification(postId,likeDTO.getLiker(),targetUserId, TYPE, ACTION);//设置通知对象以及通知类型为点赞通知
             LikePostNotificationDTO likePostNotificationDTO = new LikePostNotificationDTO();
             likePostNotificationDTO.setNotification(likeNotification);
@@ -200,6 +208,57 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    // 模拟推荐帖子
+    @Override
+    public ResponseVO<?> testRecommendPost(Long userId) {
+        List<Post> posts = postMapper.selectAll();
+        List<PostVO> postVOs = new ArrayList<>();
+        for (Post post : posts) {
+            PostVO postVO = new PostVO();
+            BeanUtils.copyProperties(post, postVO);
+            // 添加帖子话题
+            List<Long> topicIds = postTopicMapper.selectTopicIdsByPostId(post.getId());
+            List<String> topicNames = topicMapper.selectTopicNames(topicIds);
+            System.out.println("topicNames: " + topicNames);
+            postVO.setTopics(topicNames);
+
+            // 添加帖子分类
+            if (post.getCategoryId() != null) {
+                Category category = categoryMapper.selectById(post.getCategoryId());
+                postVO.setCategory(category.getName());
+            }
+
+            // 添加帖子图片
+            List<PostMedia> postMedia = postMediaMapper.selectByPostId(post.getId());
+            String mediaType = postMedia.get(0).getMediaType();
+            List<String> mediaUrls = new ArrayList<>();
+            for (PostMedia media : postMedia) {
+                mediaUrls.add(media.getMediaType());
+            }
+            MediaVO mediaVO = new MediaVO();
+            mediaVO.setType(mediaType);
+            mediaVO.setUrl(mediaUrls);
+            postVO.setMedia(mediaVO);
+
+            // 封装作者信息
+            UserinfoVO user = userClient.getUserById(post.getUserId());
+            AuthorVO author = new AuthorVO();
+            author.setUserId(user.getId());
+            author.setNickname(user.getNickname());
+            author.setAvatar(user.getAvatar());
+            postVO.setAuthor(author);
+
+            // 添加点赞状态（假设未点赞）
+            postVO.setLikeFlag(0);
+            // 添加收藏状态（假设未收藏）
+            postVO.setSaveFlag(0);
+
+            postVOs.add(postVO);
+        }
+
+
+        return ResponseVO.success(postVOs);
+    }
 
     // 收藏
 

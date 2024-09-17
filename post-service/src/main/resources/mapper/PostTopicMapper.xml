@@ -10,4 +10,9 @@
         </foreach>
     </insert>
 
+    <select id="selectTopicIdsByPostId" resultType="java.lang.Long">
+        SELECT * FROM post_topics WHERE post_id = #{postId}
+    </select>
+
+
 </mapper>

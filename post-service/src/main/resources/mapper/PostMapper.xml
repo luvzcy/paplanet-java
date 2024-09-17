@@ -20,5 +20,8 @@
     <select id="selectById" resultType="com.wen.common.domain.post.Post">
         SELECT * FROM posts WHERE id = #{id}
     </select>
+    <select id="selectAll" resultType="com.wen.common.domain.post.Post">
+        SELECT * FROM posts
+    </select>
 
 </mapper>

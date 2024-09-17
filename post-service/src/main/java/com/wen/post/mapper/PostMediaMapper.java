@@ -8,4 +8,5 @@ import java.util.List;
 @Mapper
 public interface PostMediaMapper {
     int insert(List<PostMedia> postMedias);
+    List<PostMedia> selectByPostId(Long id);
 }

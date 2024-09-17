@@ -24,6 +24,8 @@ public class NotificationService {
      */
     public void sendNotification(LikePostNotificationDTO notification) {
 
+        System.out.println("sendNotification: " + notification);
+
         // 将UserNotification对象序列化为字符串
         String serializedNotification = KryoUtil.serializeToString(notification);
 
@@ -32,6 +34,7 @@ public class NotificationService {
 
         // 发送序列化后的字符串
         rabbitTemplate.convertAndSend(notificationExchange.getName(),routingKey, serializedNotification);//参数分别为交换机名，路由键，消息
+
     }
 
     /**

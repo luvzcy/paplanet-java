@@ -28,6 +28,12 @@ public class PostController {
         return postService.reviewPost(reviewPostDTO);
     }
 
+    // 模拟推荐帖子（无推荐算法）
+    @GetMapping(value = "/recommendTest")
+    public ResponseVO<?> recommendPost(@RequestParam(value = "userId") Long userId) {
+        return postService.testRecommendPost(userId);
+    }
+
     // ToDo 删除帖子
     @DeleteMapping(value = "/{id}")
     public ResponseVO<?> deletePost(@PathVariable Long id) {

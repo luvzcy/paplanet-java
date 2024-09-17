@@ -12,6 +12,8 @@ public interface PostService {
     ResponseVO<?> reviewPost(ReviewPostDTO reviewPostDTO);
     // 点赞
     ResponseVO<?> likePost(LikeDTO likeDTO);
+    //模拟推荐帖子
+    ResponseVO<?> testRecommendPost(Long userId);
 
 
 }

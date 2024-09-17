@@ -27,6 +27,7 @@ public class NotificationReceiver {
 
         // 将消息转换为 LikePostNotificationDTO 对象
         LikePostNotificationDTO likePostNotificationDTO = KryoUtil.deserializeFromString(message, LikePostNotificationDTO.class);
+        System.out.println("接收到点赞或取消点赞的通知: " + likePostNotificationDTO);
         // 操作行为（添加or删除）
         String action = likePostNotificationDTO.getAction();
         // 获取通知对象

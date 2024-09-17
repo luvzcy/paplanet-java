@@ -9,5 +9,8 @@
             (#{postMedia.postId}, #{postMedia.mediaType}, #{postMedia.mediaUrl})
         </foreach>
     </insert>
+    <select id="selectByPostId" resultType="com.wen.common.domain.post.PostMedia">
+        SELECT * FROM post_medias WHERE post_id = #{postId}
+    </select>
 
 </mapper>

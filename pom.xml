@@ -18,6 +18,7 @@
 
 	<modules>
 		<module>common-service</module>
+		<module>api-gateway</module>
 		<module>user-service</module>
 		<module>post-service</module>
 		<module>comment-service</module>

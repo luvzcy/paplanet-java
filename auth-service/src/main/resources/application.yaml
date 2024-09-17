@@ -1,13 +1,11 @@
 server:
   port: 9000
-
 logging:
   level:
     root: INFO
     org.springframework.web: INFO
     org.springframework.security: DEBUG
     org.springframework.security.oauth2: INFO
-
 spring:
   application:
     name: auth-service #服务名称
@@ -30,7 +28,6 @@ spring:
           max-wait: -1    # 最大阻塞等待时间，负值表示没限制，默认-1
           max-idle: 8     # 最大空闲连接，默认8
           min-idle: 0     # 最小空闲连接，默认0
-
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   configuration:
