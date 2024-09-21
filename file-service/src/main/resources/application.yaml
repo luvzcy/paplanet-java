@@ -1,0 +1,17 @@
+server:
+  port: 9293
+spring:
+  application:
+    name: file-service #服务名称
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8850 # nacos地址
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/paplanet_post?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 1234
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

@@ -7,5 +7,6 @@ import java.util.List;
 @Data
 public class MediaVO {
     private List<String> url;//媒体地址
+    private String coverUrl;//视频封面
     private String type;//媒体类型
 }

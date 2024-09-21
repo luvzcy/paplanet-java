@@ -24,4 +24,9 @@ spring:
           uri: lb://comment-service
           predicates:
             - Path=/comment/**
+        - id: file-service
+          uri: lb://file-service
+          predicates:
+            - Path=/vdo/**
+            - Path=/oss/**
 

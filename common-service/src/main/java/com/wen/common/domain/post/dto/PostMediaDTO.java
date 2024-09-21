@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class PostMediaDTO {
-    private String mediaType;
-    private List<String> mediaUrls;
+    private String type;
+    private List<String> urls;
+    private String videoId;
 }

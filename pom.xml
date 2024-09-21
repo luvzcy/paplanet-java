@@ -24,6 +24,7 @@
 		<module>comment-service</module>
 		<module>auth-service</module>
 		<module>notification-service</module>
+		<module>file-service</module>
 	</modules>
 
 

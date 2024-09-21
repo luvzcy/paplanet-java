@@ -6,6 +6,7 @@ import lombok.Data;
 public class PostMedia {
     private Long id;
     private Long postId;
-    private String mediaType;
-    private String mediaUrl;
+    private String type;
+    private String url;
+    private String videoId;
 }

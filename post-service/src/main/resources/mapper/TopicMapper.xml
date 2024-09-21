@@ -10,6 +10,12 @@
             #{id}
         </foreach>
     </select>
+    <select id="selectTopicIdsByTopicNames" resultType="java.lang.Long">
+        SELECT id FROM topics WHERE name IN
+        <foreach item="name" collection="list" open="(" separator="," close=")">
+            #{name}
+        </foreach>
+    </select>
 
 
 </mapper>

@@ -9,5 +9,6 @@ import java.util.List;
 public interface TopicMapper {
 
     List<String> selectTopicNames(List<Long> ids);
+    List<Long> selectTopicIdsByTopicNames(List<String> topicNames);
 
 }
