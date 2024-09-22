@@ -7,6 +7,15 @@ spring:
     nacos:
       server-addr: 127.0.0.1:8850
     gateway:
+      gateway:
+        globalcors:
+          cors-configurations:
+            '[/**]':
+              allowedOrigins: "*"
+              allowedHeaders: "*"
+              allowedMethods: "*"
+        default-filters:
+          - DedupeResponseHeader=Vary Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
       routes:
         - id: user-service
           uri: lb://user-service
@@ -24,9 +33,9 @@ spring:
           uri: lb://comment-service
           predicates:
             - Path=/comment/**
-        - id: file-service
-          uri: lb://file-service
+        - id: paplanet-file
+          uri: lb://paplanet-file
           predicates:
-            - Path=/vdo/**
-            - Path=/oss/**
+            - Path=/vdo/**,/oss/**
+
 

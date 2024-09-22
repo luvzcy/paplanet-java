@@ -3,10 +3,10 @@
 <mapper namespace="com.wen.post.mapper.PostMediaMapper">
 
     <insert id="insert" parameterType="java.util.List">
-        INSERT INTO post_medias (post_id, media_type, media_url)
+        INSERT INTO post_medias (post_id, type, url, video_id)
         VALUES
         <foreach collection="list" item="postMedia" index="index" separator=",">
-            (#{postMedia.postId}, #{postMedia.mediaType}, #{postMedia.mediaUrl})
+            (#{postMedia.postId}, #{postMedia.type}, #{postMedia.url}, #{postMedia.videoId})
         </foreach>
     </insert>
     <select id="selectByPostId" resultType="com.wen.common.domain.post.PostMedia">

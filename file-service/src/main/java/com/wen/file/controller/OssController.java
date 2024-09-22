@@ -25,10 +25,10 @@ public class OssController {
     private String bucket = "hhjs-guangzhou";
     private String endpoint = "oss-cn-guangzhou.aliyuncs.com";
 
-    @CrossOrigin
-    @RequestMapping("/getOssPolicy")
+    @GetMapping("/getOssPolicy")
     public Map<String,String> getOssPolicy(){ // 获取阿里云OSS的上传策略
 
+        System.out.println("asdj");
         String host = "https://" + bucket + "." + endpoint; // 存储桶域名
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String format = simpleDateFormat.format(new Date()); // 格式化当前时间
@@ -70,7 +70,6 @@ public class OssController {
         return null;
     }
 
-    @CrossOrigin
     @DeleteMapping("/delete")
     public String deleteFile(@RequestParam("url") String url) {
         System.out.println("Full URL: " + url);
@@ -94,7 +93,6 @@ public class OssController {
         }
     }
 
-    @CrossOrigin
     @DeleteMapping("/deleteFiles")
     public String deleteFiles(@RequestBody List<String> urls) {
         System.out.println("URLs to delete: " + urls);
@@ -130,6 +128,12 @@ public class OssController {
             System.out.println("Error extracting object name from URL: " + e.getMessage());
             return null;
         }
+    }
+
+    // 测试get
+    @GetMapping("/test")
+    public String test(){
+        return "hello world";
     }
 
 }

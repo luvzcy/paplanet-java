@@ -17,8 +17,9 @@ public class PostController {
     }
 
     //添加帖子(未审核)
-    @PostMapping(value="/add")
+    @PostMapping(value="/addPost")
     public ResponseVO<?> addPost(@RequestBody PostDTO postDTO){
+        System.out.println("postDTO = " + postDTO);
         return postService.addPost(postDTO);
     }
 

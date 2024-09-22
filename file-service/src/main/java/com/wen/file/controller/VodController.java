@@ -15,7 +15,6 @@ public class VodController {
     private String accessKeyId = "LTAI5tQHEjpLjQrreBFgeJib";
     private String accessKeySecret = "h7NH86mZ21dyrT4DCZOjQ5RhOyCYL4";
 
-    @CrossOrigin
     @GetMapping("/getUploadAuth")
     public Map<String, Object> getUploadAuth(@RequestParam("title") String title, @RequestParam("filename") String filename) {
 
@@ -40,7 +39,6 @@ public class VodController {
     }
 
     //根据VideoId获取上传凭证
-    @CrossOrigin
     @GetMapping("/getUploadAuthByVideoId")
     public Map<String, Object> getUploadAuthByVideoId(@RequestParam("videoId") String videoId) {
         String regionId = "cn-shanghai";
@@ -62,7 +60,6 @@ public class VodController {
         }
     }
 
-    @CrossOrigin
     @DeleteMapping("/deleteVideo")
     public Map<String, Object> deleteVideo(@RequestParam("videoId") String videoId) {
         String regionId = "cn-shanghai";
@@ -81,6 +78,10 @@ public class VodController {
             e.printStackTrace();
             throw new RuntimeException("删除视频失败");
         }
+    }
+    @GetMapping("/test")
+    public  void test() {
+        System.out.println("测试");
     }
 
 }

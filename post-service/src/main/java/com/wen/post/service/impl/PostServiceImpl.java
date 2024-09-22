@@ -88,10 +88,10 @@ public class PostServiceImpl implements PostService {
 
         // 3. 添加帖子的图片或视频数据
         // 3.1 获取图片或视频地址
+        System.out.println("postDTO:"+postDTO);
         List<String> mediaUrls = postDTO.getMedias().getUrls();
         String videoId = postDTO.getMedias().getVideoId();
         String mediaType = postDTO.getMedias().getType();
-
         // 3.2 将图片视频的格式转换成实体类的格式
         List<PostMedia> postMedias = new ArrayList<>();
 
@@ -107,15 +107,20 @@ public class PostServiceImpl implements PostService {
         }
 
         // 3.3 批量添加图片或视频数据
-        if (postMedias.isEmpty() || postMediaMapper.insert(postMedias) <= 0) {
-            throw new RuntimeException("添加媒体数据失败");
+        // 3.3 批量添加图片或视频数据（只调用一次）
+        int i3 = 0;
+        if (!postMedias.isEmpty()) {
+            i3 = postMediaMapper.insert(postMedias);
+            if (i3 <= 0) {
+                throw new RuntimeException("添加媒体数据失败");
+            }
         }
 
         // 3.3 批量添加图片或视频数据
-        int i3 = postMediaMapper.insert(postMedias);
-        if (i3 <= 0) {
-            throw new RuntimeException("添加媒体数据失败");
-        }
+//        int i3 = postMediaMapper.insert(postMedias);
+//        if (i3 <= 0) {
+//            throw new RuntimeException("添加媒体数据失败");
+//        }
 
         return ResponseVO.success("成功发布帖子");
     }
@@ -125,13 +130,12 @@ public class PostServiceImpl implements PostService {
         PostMedia postMedia = new PostMedia();
         postMedia.setPostId(postId);
         postMedia.setType(mediaType);
-
         if (MediaType.IMAGE.name().equals(mediaType)) {
             postMedia.setUrl(mediaUrl);
         } else {
             postMedia.setVideoId(videoId);
         }
-
+        System.out.println("postMedia: " + postMedia);
         return postMedia;
     }
 

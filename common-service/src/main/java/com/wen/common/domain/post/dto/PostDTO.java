@@ -12,6 +12,7 @@ import java.util.List;
 public class PostDTO {
     private Long userId;
     private String content;
+    private String category;
     private List<String> topics;
     private Double location;
     private PostMediaDTO medias;

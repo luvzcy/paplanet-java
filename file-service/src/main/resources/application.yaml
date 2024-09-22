@@ -2,7 +2,7 @@ server:
   port: 9293
 spring:
   application:
-    name: file-service #服务名称
+    name: paplanet-file #服务名称
   cloud:
     nacos:
       server-addr: 127.0.0.1:8850 # nacos地址
