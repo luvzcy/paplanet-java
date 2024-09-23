@@ -33,8 +33,8 @@ spring:
           uri: lb://comment-service
           predicates:
             - Path=/comment/**
-        - id: paplanet-file
-          uri: lb://paplanet-file
+        - id: file-service
+          uri: lb://file-service
           predicates:
             - Path=/vdo/**,/oss/**
 

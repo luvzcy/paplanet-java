@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class PostVO {
+    private Long id; // 添加 id 属性
     private Long userId;
     private String content;
     private String category;
@@ -15,7 +16,7 @@ public class PostVO {
     private MediaVO media;
     private AuthorVO author;
     private Double location;
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
     private Integer likeFlag; // 0: 未点赞，1：已点赞
     private Integer saveFlag; // 0: 未收藏，1：已收藏
 }

@@ -14,6 +14,7 @@ import com.wen.common.domain.post.vo.AuthorVO;
 import com.wen.common.domain.post.vo.MediaVO;
 import com.wen.common.domain.post.vo.PostVO;
 import com.wen.common.lang.ResponseVO;
+import com.wen.post.client.FileClient;
 import com.wen.post.client.UserClient;
 import com.wen.post.mapper.*;
 import com.wen.post.service.PostService;
@@ -25,7 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -47,6 +50,8 @@ public class PostServiceImpl implements PostService {
     private CategoryMapper categoryMapper;
     @Resource
     private UserClient userClient;
+    @Resource
+    private FileClient fileClient;
 
     // 添加帖子
     @Override
@@ -238,13 +243,15 @@ public class PostServiceImpl implements PostService {
     public ResponseVO<?> testRecommendPost(Long userId) {
         List<Post> posts = postMapper.selectAll();
         List<PostVO> postVOs = new ArrayList<>();
+        Map<Long, MediaVO> mediaMap = new HashMap<>(); // 用于存储每个 postId 对应的 MediaVO
+
         for (Post post : posts) {
             PostVO postVO = new PostVO();
             BeanUtils.copyProperties(post, postVO);
+
             // 添加帖子话题
             List<Long> topicIds = postTopicMapper.selectTopicIdsByPostId(post.getId());
             List<String> topicNames = topicMapper.selectTopicNames(topicIds);
-            System.out.println("topicNames: " + topicNames);
             postVO.setTopics(topicNames);
 
             // 添加帖子分类
@@ -253,16 +260,35 @@ public class PostServiceImpl implements PostService {
                 postVO.setCategory(category.getName());
             }
 
-            // 添加帖子图片
+            // 获取与当前帖子相关的所有媒体
             List<PostMedia> postMedia = postMediaMapper.selectByPostId(post.getId());
-            String mediaType = postMedia.get(0).getType();
-            List<String> mediaUrls = new ArrayList<>();
+
+            MediaVO mediaVO = mediaMap.computeIfAbsent(post.getId(), k -> new MediaVO()); // 使用 computeIfAbsent 创建 MediaVO
+            boolean hasVideo = false; // 标记是否存在视频
+
             for (PostMedia media : postMedia) {
-                mediaUrls.add(media.getType());
+                if (media.getType().equals(MediaType.IMAGE.name())) {
+                    // 处理图片
+                    mediaVO.getUrls().add(media.getUrl()); // 添加图片 URL
+                    mediaVO.setType(MediaType.IMAGE.name()); // 设置类型为 IMAGE
+                } else if (media.getType().equals(MediaType.VIDEO.name())) {
+                    // 处理视频
+                    Map<String, Object> playAuthResponse = fileClient.getPlayAuth(media.getVideoId());
+                    String playAuth = (String) playAuthResponse.get("PlayAuth");
+
+                    mediaVO.setVideoId(media.getVideoId());
+                    mediaVO.setPlayAuth(playAuth);
+                    mediaVO.setType(MediaType.VIDEO.name()); // 设置类型为 VIDEO
+                    hasVideo = true; // 标记视频存在
+                }
             }
-            MediaVO mediaVO = new MediaVO();
-            mediaVO.setType(mediaType);
-            mediaVO.setUrl(mediaUrls);
+
+            // 如果存在视频，清空图片 URLs（假设一个帖子只允许有一种媒体类型）
+            if (hasVideo) {
+                mediaVO.setUrls(new ArrayList<>()); // 清空图片 URLs
+            }
+
+            // 设置当前 postVO 的媒体
             postVO.setMedia(mediaVO);
 
             // 封装作者信息
@@ -281,9 +307,18 @@ public class PostServiceImpl implements PostService {
             postVOs.add(postVO);
         }
 
+        // 最终整理所有的媒体信息到每个帖子中
+        for (PostVO postVO : postVOs) {
+            MediaVO mediaVO = mediaMap.get(postVO.getId());
+            if (mediaVO != null) {
+                postVO.setMedia(mediaVO);
+            }
+        }
 
         return ResponseVO.success(postVOs);
     }
+
+
 
     // 收藏
 

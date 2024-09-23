@@ -1,6 +1,7 @@
 package com.wen.file.controller;
 
 import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.vod.model.v20170321.*;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,7 @@ public class VodController {
         }
     }
 
+    //根据VideoId删除视频
     @DeleteMapping("/deleteVideo")
     public Map<String, Object> deleteVideo(@RequestParam("videoId") String videoId) {
         String regionId = "cn-shanghai";
@@ -79,9 +81,26 @@ public class VodController {
             throw new RuntimeException("删除视频失败");
         }
     }
-    @GetMapping("/test")
-    public  void test() {
-        System.out.println("测试");
+
+    // 根据VideoId获取视频播放凭证
+    @GetMapping("/getPlayAuth")
+    public Map<String, Object> getPlayAuth(@RequestParam("videoId") String videoId) throws ClientException {
+        String regionId = "cn-shanghai";
+        DefaultProfile profile = DefaultProfile.getProfile(regionId, accessKeyId, accessKeySecret);
+        DefaultAcsClient defaultAcsClient = new DefaultAcsClient(profile);
+        GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
+        request.setVideoId(videoId); // 设置视频ID
+
+        try {
+            GetVideoPlayAuthResponse response = defaultAcsClient.getAcsResponse(request);
+            Map<String, Object> result = new HashMap<>();
+            result.put("PlayAuth", response.getPlayAuth());
+            result.put("VideoId", videoId);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("获取视频播放凭证失败");
+        }
     }
 
 }

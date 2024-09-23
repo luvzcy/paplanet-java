@@ -19,7 +19,6 @@ public class PostController {
     //添加帖子(未审核)
     @PostMapping(value="/addPost")
     public ResponseVO<?> addPost(@RequestBody PostDTO postDTO){
-        System.out.println("postDTO = " + postDTO);
         return postService.addPost(postDTO);
     }
 
@@ -33,6 +32,13 @@ public class PostController {
     @GetMapping(value = "/recommendTest")
     public ResponseVO<?> recommendPost(@RequestParam(value = "userId") Long userId) {
         return postService.testRecommendPost(userId);
+    }
+
+    // ToDo 帖子推荐
+    // 假设基于简单的热门帖子推荐
+    @GetMapping(value = "/recommended")
+    public ResponseVO<?> getRecommendedPosts() {
+        return null;
     }
 
     // ToDo 删除帖子
@@ -56,13 +62,6 @@ public class PostController {
     // ToDo 查询所有帖子
     @GetMapping(value = "/all")
     public ResponseVO<?> getAllPosts() {
-        return null;
-    }
-
-    // ToDo 帖子推荐
-    // 假设基于简单的热门帖子推荐
-    @GetMapping(value = "/recommended")
-    public ResponseVO<?> getRecommendedPosts() {
         return null;
     }
 
